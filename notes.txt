@@ -1,0 +1,15 @@
+#Notes for  creating and running a react-native application
+
+--
+
+Initialising a new react native project
+
+	- npx react-native init "folderName"
+
+--
+
+Running a react native project
+
+	- nvigate to the project folder
+	- run “npx react-native run-android”
+ 
