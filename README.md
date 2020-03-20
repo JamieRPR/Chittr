@@ -1,5 +1,6 @@
 # Chittr
 
+<<<<<<< HEAD
 # Running the server code
 1. navigate to ./chittr_server_v5
 2. run npm install
@@ -19,3 +20,6 @@ OR
 
 
 
+=======
+Chittr is a social media app, created with react-native.
+>>>>>>> a50f52b5ef41363fbf9849812df0dcaf4e8296eb
