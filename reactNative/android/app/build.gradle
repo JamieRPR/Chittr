@@ -128,7 +128,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.testproject"
+        applicationId "com.reactnative"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -178,9 +178,11 @@ android {
     }
 }
 
+//apply from: '../../node_modules/react-native-unimodules/gradle.groovy'
+
 dependencies {
-    implementation project(':react-native-screens')
-    implementation project(':react-native-reanimated')
+//    addUnimodulesDependencies()
+//    implementation project(':unimodules-react-native-adapter')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
 

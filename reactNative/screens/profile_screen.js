@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
-import * as StyleMaster from '../assets/constants/StyleSheet'
-import { SafeAreaView, View, Image, FlatList, StyleSheet, Text } from 'react-native';
-import Constants from 'expo-constants';
+import { SafeAreaView, TouchableHighlight, View, Image, FlatList, StyleSheet, Text } from 'react-native';
+
+var styleGlobal = require('../assets/constants/StyleSheet');
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column', 
-    backgroundColor: '#FFFBF7'
-  },
   userProfile: {
     flexDirection: 'column', 
     alignItems: 'center',
@@ -86,7 +81,7 @@ function Item({ userName, body}) {
     <View style={styles.item}>
       <View style={{flex: 1, flexDirection: 'row', padding: 10}}>
         <Image 
-          source={require('../Images/defaultUserIcon.jpg')}  
+          source={require('../assets/Images/defaultUserIcon.jpg')}  
           style={styles.topBarUserIcon} 
         />
         <Text style={styles.chittrTitle}>{userName}</Text>
@@ -99,17 +94,31 @@ function Item({ userName, body}) {
 }
 
 export default class ProfScreen extends Component {
+
+  constructor(props) {
+    super(props);
+    // this.state = { /* initial state */ };
+  }
+
   render() {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styleGlobal.container}>
         <View style={styles.userProfile}>
           <Image
-            source={require('../Images/defaultUserIcon.jpg')}  
+            source={require('../assets/Images/defaultUserIcon.jpg')}  
             style={styles.drawerUserIcon} 
           />
           <Text>Blaze and Raze</Text>
           <Text>@420KushMan</Text>
-          <Text>420 Followers | 69 Following</Text>
+          <View style={{flexDirection: 'row', padding: 10}}>
+            <TouchableHighlight onPress={() => { this.props.navigation.navigate('Followers');}}>
+              <Text>420 Followers |</Text>
+            </TouchableHighlight>
+            <TouchableHighlight onPress={() => { this.props.navigation.navigate('Following');}}>
+            <Text>| 69 Following</Text>
+          </TouchableHighlight>  
+          </View>
+
         </View>
         <FlatList
           data={DATA}

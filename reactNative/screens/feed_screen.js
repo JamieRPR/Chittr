@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { SafeAreaView, View, Image, FlatList, StyleSheet, Text } from 'react-native';
+import { SafeAreaView, View, Image, FlatList, StyleSheet, Text, ActivityIndicator } from 'react-native';
 import Constants from 'expo-constants';
+// import getChits from '../APICalls/Chits'
 
 const styles = StyleSheet.create({
   container: {
@@ -34,63 +35,74 @@ const styles = StyleSheet.create({
   }
 });
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abba',
-    userName: '@420KushMan',
-    body: "🐠🦀🐙🦑🐡 It's 4:20 AM PT kush nugs for Mass. marijuana OK Patients can officially apply for 4:20 PM MT?"
-  },
-  {
-    id: 'bd7acbea-c1b1-46c2-a5-3ad53abb28ba',
-    userName: '@Italian',
-    body: "Stay tuned for and on this day before What makes a scuola, e per ore ogni nott… Italian --->!"
-  },
-  {
-    id: 'bdacbea-c1b1-46c2-aed5-3ad53abb28ba',
-    userName: '@Brexit',
-    body: "The World Health Organization raised its 325-year history, Carney walked down the Greens, a bigger."
-  },
-  {
-    id: 'bd7acbea-c1b1-4c2-aed5-3ad53abb28ba',
-    userName: '@wrestler',
-    body: "Having a practice session for my deck - how exciting and so much fun Leaving now...............back?"
-  },
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53ab28ba',
-    userName: '@johndarby',
-    body: "I do not remember where the left and no idea from whom I uploaded a YouTube video -- Darby Christmas!"
-  },
-];
-
-function Item({ userName, body}) {
-  return (
-    <View style={styles.item}>
-      <View style={{flex: 1, flexDirection: 'row', padding: 10}}>
-        <Image 
-          source={require('../Images/defaultUserIcon.jpg')}  
-          style={styles.topBarUserIcon} 
-        />
-        <Text style={styles.chittrTitle}>{userName}</Text>
-      </View>
-      <Text style={styles.chittrBody}>
-        {body}
-      </Text>
-    </View>
-  );
-}
-
+// function Item({ userName, body}) {
+//   return (
+//     <View style={styles.item}>
+//       <View style={{flex: 1, flexDirection: 'row', padding: 10}}>
+//         <Image 
+//           source={require('../assets/Images/defaultUserIcon.jpg')}  
+//           style={styles.topBarUserIcon} 
+//         />
+//         <Text style={styles.chittrTitle}>{userName}</Text>
+//       </View>
+//       <Text style={styles.chittrBody}>
+//         {body}
+//       </Text>
+//     </View>
+//   );
+// }
 
 export default class FeedScreen extends Component {
-  render() {
+
+  state = {
+    chitsList: [],
+    isLoading: true
+  }
+
+  async componentDidMount() {
+    try {
+      const getChits = await fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
+      const chits = await getChits.json();
+      this.setState({chitsList: chits, isLoading: false})
+    } catch(err) {
+      console.log("Error fetching data-----------", err);
+    }
+  }
+
+  renderItem(data) {
     return (
-      <SafeAreaView style={styles.container}>
-        <FlatList
-          data={DATA}
-          renderItem={({ item }) => <Item userName={item.userName} body={item.body} />}
-          keyExtractor={item => item.id}
-        />
-      </SafeAreaView>
+      <View style={styles.item}>
+        <View style={{flex: 1, flexDirection: 'row', padding: 10}}>
+          <Image 
+            source={require('../assets/Images/defaultUserIcon.jpg')}  
+            style={styles.topBarUserIcon} 
+          />
+          <Text style={styles.chittrTitle}>{data.item.user.given_name}</Text>
+        </View>
+        <Text style={styles.chittrBody}>
+          {data.item.chit_content}
+        </Text>
+      </View>
     );
+  }
+
+  render() {
+
+    const { chitsList, isLoading } = this.state;
+
+    if(!isLoading) {
+      return (
+        <SafeAreaView style={styles.container}>
+          <FlatList
+            data={chitsList}
+            renderItem={this.renderItem}
+            keyExtractor={item => item.id}
+          />
+        </SafeAreaView>
+      );
+    } else {
+      return <ActivityIndicator />
+    }
   }
 }
 
